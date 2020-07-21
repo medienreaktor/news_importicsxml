@@ -35,6 +35,7 @@ class ImportTaskAdditionalFieldProvider implements AdditionalFieldProviderInterf
 //            'email' => ['type' => 'input', 'default' => $GLOBALS['BE_USER']->user['email']],
             'persistAsExternalUrl' => ['type' => 'checkbox'],
             'cleanBeforeImport' => ['type' => 'checkbox'],
+            'hideBeforeImport' => ['type' => 'checkbox'],
         ];
 
         foreach ($fields as $field => $configuration) {
@@ -124,6 +125,7 @@ class ImportTaskAdditionalFieldProvider implements AdditionalFieldProviderInterf
         $task->pid = $submittedData['pid'];
         $task->persistAsExternalUrl = $submittedData['persistAsExternalUrl'];
         $task->cleanBeforeImport = $submittedData['cleanBeforeImport'];
+        $task->hideBeforeImport = $submittedData['hideBeforeImport'];
     }
 
     /**

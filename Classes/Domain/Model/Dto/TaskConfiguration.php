@@ -37,6 +37,9 @@ class TaskConfiguration
     /** @var bool */
     protected $cleanBeforeImport = false;
 
+    /** @var bool */
+    protected $hideBeforeImport = false;
+
     /**
      * @return string
      */
@@ -147,6 +150,22 @@ class TaskConfiguration
     public function setCleanBeforeImport($cleanBeforeImport)
     {
         $this->cleanBeforeImport = $cleanBeforeImport;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getHideBeforeImport()
+    {
+        return $this->hideBeforeImport;
+    }
+
+    /**
+     * @param bool $hideBeforeImport
+     */
+    public function setHideBeforeImport($hideBeforeImport)
+    {
+        $this->hideBeforeImport = $hideBeforeImport;
     }
 
     /**

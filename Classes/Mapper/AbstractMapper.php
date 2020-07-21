@@ -9,6 +9,7 @@ namespace GeorgRinger\NewsImporticsxml\Mapper;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogManager;
@@ -27,6 +28,7 @@ class AbstractMapper
 
     protected function removeImportedRecordsFromPid(int $pid, string $importSource)
     {
+        /** @var Connection $connection */
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getConnectionForTable('tx_news_domain_model_news');
         $connection->delete(
@@ -38,4 +40,24 @@ class AbstractMapper
             ]
         );
     }
+
+    protected function hideImportedRecordsFromPid(int $pid, string $importSource)
+    {
+        /** @var Connection $connection */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getConnectionForTable('tx_news_domain_model_news');
+        $connection->update(
+            'tx_news_domain_model_news',
+            [
+              'hidden' => 1,
+            ],
+            [
+                'deleted' => 0,
+                'hidden' => 0,
+                'pid' => $pid,
+                'import_source' => $importSource
+            ]
+        );
+    }
+
 }

@@ -43,6 +43,9 @@ class ImportTask extends AbstractTask
     /** @var int */
     public $cleanBeforeImport;
 
+    /** @var int */
+    public $hideBeforeImport;
+
     public function execute()
     {
         $success = true;
@@ -80,6 +83,7 @@ class ImportTask extends AbstractTask
         $configuration->setPid($this->pid);
         $configuration->setPersistAsExternalUrl($this->persistAsExternalUrl);
         $configuration->setCleanBeforeImport((bool)$this->cleanBeforeImport);
+        $configuration->setHideBeforeImport((bool)$this->hideBeforeImport);
 
         return $configuration;
     }

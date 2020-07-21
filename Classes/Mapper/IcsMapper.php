@@ -30,6 +30,9 @@ class IcsMapper extends AbstractMapper implements MapperInterface
         if ($configuration->getCleanBeforeImport()) {
             $this->removeImportedRecordsFromPid($configuration->getPid(), $this->getImportSource());
         }
+        if ($configuration->getHideBeforeImport()) {
+            $this->hideImportedRecordsFromPid($configuration->getPid(), $this->getImportSource());
+        }
 
         $data = [];
         $path = $this->getFileContent($configuration);
