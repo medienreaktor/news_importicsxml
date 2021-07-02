@@ -10,7 +10,7 @@ namespace GeorgRinger\NewsImporticsxml\Mapper;
  */
 
 use GeorgRinger\NewsImporticsxml\Domain\Model\Dto\TaskConfiguration;
-use ICal;
+use ICal\ICal;
 use RuntimeException;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -44,43 +44,43 @@ class IcsMapper extends AbstractMapper implements MapperInterface
         $events = $iCalService->events();
 
         foreach ($events as $event) {
-            if (!isset($idCount[$event['UID']])) {
-                $idCount[$event['UID']] = 1;
+            if (!isset($idCount[$event->uid])) {
+                $idCount[$event->uid] = 1;
             } else {
-                $idCount[$event['UID']]++;
+                $idCount[$event->uid]++;
             }
-            $datetime = $iCalService->iCalDateToUnixTimestamp($event['DTSTART']);
+            $datetime = $iCalService->iCalDateToUnixTimestamp($event->dtstart);
             if ($datetime === false) {
-                $datetime = $iCalService->iCalDateToUnixTimestamp($event['DTSTAMP']);
+                $datetime = $iCalService->iCalDateToUnixTimestamp($event->dtend);
             }
 
             $data[] = [
                 'import_source' => $this->getImportSource(),
-                'import_id' => $event['UID'] . '-'. $idCount[$event['UID']],
+                'import_id' => $event->uid . '-'. $idCount[$event->uid],
                 'crdate' => $GLOBALS['EXEC_TIME'],
                 'cruser_id' => $GLOBALS['BE_USER']->user['uid'],
                 'type' => 0,
                 'pid' => $configuration->getPid(),
-                'title' => $this->cleanup($event['SUMMARY']),
-                'bodytext' => $this->cleanup($event['DESCRIPTION']),
+                'title' => $this->cleanup($event->summary),
+                'bodytext' => $this->cleanup($event->description),
                 'datetime' => $datetime,
-                'categories' => $this->getCategories((array)$event['CATEGORIES_array'], $configuration),
+//                'categories' => $this->getCategories((array)$event['CATEGORIES_array'], $configuration),
                 '_dynamicData' => [
-                    'location' => $event['LOCATION'],
-                    'datetime_end' => $iCalService->iCalDateToUnixTimestamp($event['DTEND']),
+                    'location' => $event->location,
+                    'datetime_end' => $iCalService->iCalDateToUnixTimestamp($event->dtend),
                     'news_importicsxml' => [
                         'importDate' => date('d.m.Y h:i:s', $GLOBALS['EXEC_TIME']),
                         'feed' => $configuration->getPath(),
-                        'UID' => $event['UID'],
-                        'VARIANT' => $idCount[$event['UID']],
-                        'LOCATION' => $event['LOCATION'],
-                        'DTSTART' => $event['DTSTART'],
-                        'DTSTAMP' => $event['DTSTAMP'],
-                        'DTEND' => $event['DTEND'],
-                        'PRIORITY' => $event['PRIORITY'],
-                        'SEQUENCE' => $event['SEQUENCE'],
-                        'STATUS' => $event['STATUS'],
-                        'TRANSP' => $event['TRANSP'],
+                        'UID' => $event->uid,
+                        'VARIANT' => $idCount[$event->uid],
+                        'LOCATION' => $event->location,
+                        'DTSTART' => $event->dtstart,
+                        'DTSTAMP' => $event->dtstamp,
+                        'DTEND' => $event->dtend,
+//                        'PRIORITY' => $event['PRIORITY'],
+                        'SEQUENCE' => $event->sequence,
+                        'STATUS' => $event->status,
+                        'TRANSP' => $event->transp,
                     ]
                 ],
             ];
