@@ -39,7 +39,6 @@ class IcsMapper extends AbstractMapper implements MapperInterface
 
         $idCount = [];
 
-        require_once(ExtensionManagementUtility::extPath('news_importicsxml') . 'Resources/Private/Contrib/Ical.php');
         $iCalService = new ICal($path);
         $events = $iCalService->events();
 
